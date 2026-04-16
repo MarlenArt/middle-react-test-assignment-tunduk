@@ -1,0 +1,17 @@
+.card {
+  padding: 8px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  &_item {
+    display: flex;
+    gap: 4px;
+    &__label {
+      font-size: 14px;
+      color: grey;
+    }
+    &__value {
+      padding: 2px;
+    }
+  }
+}

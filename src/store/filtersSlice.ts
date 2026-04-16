@@ -1,0 +1,29 @@
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { IInitialStateFilters } from '@/store/types.ts';
+
+const initialState: IInitialStateFilters = {
+  name: '',
+  sort: '',
+  verdict: '',
+};
+
+const filtersSlice = createSlice({
+  name: 'filters',
+  initialState,
+  reducers: {
+    setNameFilter: (state, action: PayloadAction<string>) => {
+      state.name = action.payload;
+    },
+    setSortFilter: (state, action: PayloadAction<string>) => {
+      state.sort = action.payload;
+    },
+    setVerdictFilter: (state, action: PayloadAction<string>) => {
+      state.verdict = action.payload;
+    },
+  },
+});
+
+export const filtersReducer = filtersSlice.reducer;
+
+export const { setNameFilter, setVerdictFilter, setSortFilter } =
+  filtersSlice.actions;

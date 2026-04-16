@@ -1,0 +1,25 @@
+.wrapper {
+  width: 100%;
+  height: 60px;
+  background-color: white;
+  position: fixed;
+
+  .header {
+    font-size: 34px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1288px;
+    padding: 8px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &_links {
+      display: flex;
+      gap: 24px;
+
+      &__link {
+        cursor: pointer;
+      }
+    }
+  }
+}
