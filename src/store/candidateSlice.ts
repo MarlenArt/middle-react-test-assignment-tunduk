@@ -8,6 +8,8 @@ const initialState: IInitialStateCandidates = {
   filteredList: [],
   listLoading: false,
   error: null,
+  currentPage: 1,
+  itemsPerPage: 10,
 };
 
 const candidateSlice = createSlice({
@@ -61,6 +63,9 @@ const candidateSlice = createSlice({
 
       state.filteredList = result;
     },
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -81,4 +86,4 @@ const candidateSlice = createSlice({
 });
 
 export const candidateReducer = candidateSlice.reducer;
-export const { applyAllFilters } = candidateSlice.actions;
+export const { applyAllFilters, setCurrentPage } = candidateSlice.actions;

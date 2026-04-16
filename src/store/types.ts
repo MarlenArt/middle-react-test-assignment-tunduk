@@ -26,6 +26,8 @@ export interface IInitialStateCandidates {
   filteredList: ICandidateRes[];
   listLoading: boolean;
   error: string | null;
+  currentPage: number;
+  itemsPerPage: number;
 }
 
 export interface IInitialStateFilters {

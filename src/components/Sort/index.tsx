@@ -13,8 +13,12 @@ export const Sort = () => {
     const value = e.target.value;
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
-      if (value && value !== 'default') next.set('sort', value);
-      else next.delete('sort');
+      if (value && value !== 'default') {
+        next.set('sort', value);
+      } else {
+        next.delete('sort');
+      }
+      next.set('page', '1');
       return next;
     });
   };

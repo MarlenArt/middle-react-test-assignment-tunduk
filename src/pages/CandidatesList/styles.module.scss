@@ -1,5 +1,8 @@
 .container {
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   .cards {
     display: flex;
     flex-direction: column;
@@ -7,7 +10,6 @@
   }
 
   .filters {
-    margin-bottom: 20px;
     display: flex;
     gap: 20px;
 

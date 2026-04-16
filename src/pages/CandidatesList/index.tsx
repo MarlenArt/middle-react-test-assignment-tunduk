@@ -18,36 +18,40 @@ import {
   setVerdictFilter,
   setSortFilter,
 } from '@/store/filtersSlice.ts';
-import { applyAllFilters } from '@/store/candidateSlice.ts';
+import { applyAllFilters, setCurrentPage } from '@/store/candidateSlice.ts';
+import { Pagination } from '@/components/Pagination';
+import { selectPaginatedCandidates } from '@/store/selectorts.ts';
 
 export const CandidatesList = () => {
   const dispatch = useAppDispatch();
   const candidatesList = useAppSelector((state) => state.candidate.list);
-
+  const paginateCandidates = useAppSelector(selectPaginatedCandidates);
   const [searchParams] = useSearchParams();
 
-  const { filteredList, listLoading } = useSelector(
-    (state: RootState) => state.candidate
-  );
+  const { listLoading } = useSelector((state: RootState) => state.candidate);
 
   useEffect(() => {
     dispatch(fetchCandidatesAction());
   }, [dispatch]);
 
-  // Достаем ВСЕ данные из URL (это наш главный источник)
   const name = searchParams.get('name') || '';
   const verdict = searchParams.get('verdict') || 'все';
   const sort = (searchParams.get('sort') as TSortOption) || 'default';
+  const page = Number(searchParams.get('page')) || 1;
 
   useEffect(() => {
-    // Синхронизируем фильтры в сторе (чтобы инпуты и селекты обновились)
-    dispatch(setNameFilter(name));
     dispatch(setVerdictFilter(verdict));
     dispatch(setSortFilter(sort));
+    dispatch(setCurrentPage(page));
 
-    // Вызываем ОДНУ общую фильтрацию
-    dispatch(applyAllFilters({ name, verdict, sort }));
-  }, [name, verdict, sort, dispatch, candidatesList]);
+    if (name) {
+      dispatch(setNameFilter(name));
+    }
+
+    if (candidatesList.length > 0) {
+      dispatch(applyAllFilters({ name, verdict, sort }));
+    }
+  }, [name, verdict, sort, page, dispatch, candidatesList.length]);
 
   if (listLoading) return <div>Loading...</div>;
 
@@ -59,9 +63,12 @@ export const CandidatesList = () => {
         <FilterByVerdict />
       </div>
       <div className={styles.cards}>
-        {filteredList.map((item: ICandidateRes) => (
+        {paginateCandidates.map((item: ICandidateRes) => (
           <CandidateCard key={item.id} card={item} />
         ))}
+      </div>
+      <div className={styles.pagination}>
+        <Pagination />
       </div>
     </div>
   );

@@ -12,8 +12,12 @@ export const FilterByVerdict = () => {
     const value = e.target.value;
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
-      if (value && value !== 'все') next.set('verdict', value);
-      else next.delete('verdict');
+      if (value && value !== 'все') {
+        next.set('verdict', value);
+      } else {
+        next.delete('verdict');
+      }
+      next.set('page', '1');
       return next;
     });
   };

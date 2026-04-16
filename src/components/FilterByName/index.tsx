@@ -18,6 +18,8 @@ export const FilterByName = () => {
     dispatch(setNameFilter(value));
   };
 
+  console.log({ debouncedValue, selectNameFilter });
+
   useEffect(() => {
     setSearchParams(
       (prev) => {
@@ -29,9 +31,10 @@ export const FilterByName = () => {
 
         if (debouncedValue) {
           newParams.set('name', debouncedValue);
-        } else {
+        } else if (!debouncedValue || !selectNameFilter) {
           newParams.delete('name');
         }
+        newParams.set('page', '1');
         return newParams;
       },
       { replace: true }
