@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# Быстрый запуск
+1. Клонирование репозитория:
+    ```
+    git clone https://github.com/MarlenArt/middle-react-test-assignment-tunduk.git
+    cd middle-react-test-assignment
+   ```
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+2. Установка зависимостей:
+   В проекте используется React 19 и современный ESLint 9. Рекомендуется использовать флаг для предотвращения конфликтов версий библиотек.    
+```npm install --legacy-peer-deps```
 
-Currently, two official plugins are available:
+3. Запуск в режиме разработки:
+```npm run dev``` 
+Проект будет доступен по адресу: http://localhost:5173
+4. Проверка качества кода:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+``` npm run lint  # Линтинг (ESLint + Prettier)```
 
-## React Compiler
+```npm run test  # Тестирование (Jest + RTL)```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Стек технологий
+1. Frontend: React 19 (Hooks)
+2. State Management: Redux Toolkit 
+3. Routing: React Router 6 (с синхронизацией состояния в URL)
+4. Styling: SCSS Modules (методология BEM-like)
+5. Infrastructure: Vite, TypeScript (Strict Mode), ESLint 9 (Flat Config)
+6. Notifications: React Toastify
 
-## Expanding the ESLint configuration
+# Принятые решения и архитектура
+1. Синхронизация состояния с URL (URL as Single Source of Truth)  
+   Все фильтры (имя, вердикт, сортировка) и пагинация синхронизированы с URL-параметрами.  
+    Почему: Это позволяет пользователю делиться ссылкой на конкретную выборку данных и корректно использовать кнопки "Назад/Вперед" в браузере.
+    Реализация: Кастомный хук useDebounce для поиска, чтобы избежать "дребезга" при записи в URL.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2. Производительность и Мемоизация  
+Компоненты: Активно использован React.memo для предотвращения лишних ререндеров тяжелых списков и карточек.  
+Вычисления: Массивы для пагинации и трансформации данных (например, split стека технологий) обернуты в useMemo.  
+Обработчики: Использован useCallback для функций, передаваемых в дочерние мемоизированные компоненты.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+# Компромиссы
+1. Локальное состояние вместо API: Ввиду отсутствия бэкенда, используется имитация асинхронных запросов через createAsyncThunk и работу с моковыми данными.  
+  Простая пагинация: Реализован базовый список страниц
+   
