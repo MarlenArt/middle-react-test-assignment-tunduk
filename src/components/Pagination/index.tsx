@@ -35,30 +35,29 @@ export const Pagination = memo(() => {
   if (totalPages <= 1) return null;
 
   return (
-    <nav className={styles.pagination} aria-label="Навигация по страницам">
+    <nav className={styles.pagination}>
       <button
-        className={styles.navBtn}
+        className={styles.nav_btn}
         disabled={currentPage === 1}
         onClick={() => handlePageChange(currentPage - 1)}
       >
         Назад
       </button>
 
-      <ul className={styles.pageList}>
+      <div className={styles.page_list}>
         {pages.map((page) => (
-          <li key={page}>
-            <button
-              className={currentPage === page ? styles.active : ''}
-              onClick={() => handlePageChange(page)}
-            >
-              {page}
-            </button>
-          </li>
+          <button
+            key={page}
+            className={currentPage === page ? styles.active : ''}
+            onClick={() => handlePageChange(page)}
+          >
+            {page}
+          </button>
         ))}
-      </ul>
+      </div>
 
       <button
-        className={styles.navBtn}
+        className={styles.nav_btn}
         disabled={currentPage === totalPages}
         onClick={() => handlePageChange(currentPage + 1)}
       >
