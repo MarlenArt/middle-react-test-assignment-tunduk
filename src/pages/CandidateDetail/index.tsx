@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.ts';
-import { type ChangeEvent, useEffect, useMemo } from 'react';
+import { type ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import {
   fetchCandidateDetailAction,
   updateCandidateStatusAction,
@@ -22,6 +22,21 @@ export const CandidateDetail = () => {
     list,
   } = useAppSelector((state) => state.candidate);
 
+  const options = useMemo(
+    () => [
+      { label: 'Новый', key: 'new' },
+      { label: 'На рассмотрении', key: 'review' },
+      { label: 'Приглашён', key: 'invited' },
+      { label: 'Отклонён', key: 'rejected' },
+    ],
+    []
+  );
+
+  const techStack = useMemo(
+    () => (candidate?.stack ? candidate.stack.split(', ') : []),
+    [candidate?.stack]
+  );
+
   useEffect(() => {
     const candidateInList = list.find((item) => item.id === String(id));
     console.log({ candidateInList });
@@ -32,23 +47,13 @@ export const CandidateDetail = () => {
     }
   }, [id, dispatch, list]);
 
-  const handleBackBtn = () => {
+  const handleBackBtn = useCallback(() => {
     navigate(-1);
     dispatch(setCandidateDetail(null));
-  };
+  }, [dispatch, navigate]);
 
   if (candidateLoading) return <h1>Загрузка...</h1>;
   if (!candidate) return <h1>Кандидат не найден</h1>;
-
-  const options = useMemo(
-    () => [
-      { label: 'Новый', key: 'new' },
-      { label: 'На рассмотрении', key: 'review' },
-      { label: 'Приглашён', key: 'invited' },
-      { label: 'Отклонён', key: 'rejected' },
-    ],
-    []
-  );
 
   const handleChangeStatus = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
@@ -118,7 +123,7 @@ export const CandidateDetail = () => {
           <div className={styles.section}>
             <h3>Стек технологий</h3>
             <div className={styles.tags}>
-              {candidate.stack.split(', ').map((tech) => (
+              {techStack.map((tech) => (
                 <span key={tech} className={styles.tag}>
                   {tech}
                 </span>
