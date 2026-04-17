@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.ts';
-import { type ChangeEvent, useEffect } from 'react';
+import { type ChangeEvent, useEffect, useMemo } from 'react';
 import {
   fetchCandidateDetailAction,
   updateCandidateStatusAction,
@@ -40,12 +40,15 @@ export const CandidateDetail = () => {
   if (candidateLoading) return <h1>Загрузка...</h1>;
   if (!candidate) return <h1>Кандидат не найден</h1>;
 
-  const options = [
-    { label: 'Новый', key: 'new' },
-    { label: 'На рассмотрении', key: 'review' },
-    { label: 'Приглашён', key: 'invited' },
-    { label: 'Отклонён', key: 'rejected' },
-  ];
+  const options = useMemo(
+    () => [
+      { label: 'Новый', key: 'new' },
+      { label: 'На рассмотрении', key: 'review' },
+      { label: 'Приглашён', key: 'invited' },
+      { label: 'Отклонён', key: 'rejected' },
+    ],
+    []
+  );
 
   const handleChangeStatus = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;

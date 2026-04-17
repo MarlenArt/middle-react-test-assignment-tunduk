@@ -3,7 +3,7 @@ export interface ICandidateRes {
   name: string;
   position: string;
   pos_label: string;
-  file: string;
+  file?: string;
   email: string;
   phone?: string | null;
   city: string;
@@ -25,12 +25,12 @@ export interface IInitialStateCandidates {
   list: ICandidateRes[];
   filteredList: ICandidateRes[];
   listLoading: boolean;
-  listError: string | null;
-  candidateDetail: ICandidateRes | null;
-  candidateLoading: boolean;
-  candidateError: string | null;
-  isUpdateLoading: boolean;
-  updateError: string | null;
+  listError?: string | null;
+  candidateDetail?: ICandidateRes | null;
+  candidateLoading?: boolean;
+  candidateError?: string | null;
+  isUpdateLoading?: boolean;
+  updateError?: string | null;
 }
 
 export interface IInitialStateFilters {

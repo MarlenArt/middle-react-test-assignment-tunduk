@@ -2,13 +2,15 @@ import type { ICandidateCardProps } from './types.ts';
 
 import styles from './styles.module.scss';
 import { useNavigate } from 'react-router';
+import { memo, useCallback } from 'react';
 
-export const CandidateCard = ({ card }: Readonly<ICandidateCardProps>) => {
+export const CandidateCard = memo(({ card }: Readonly<ICandidateCardProps>) => {
   const navigate = useNavigate();
 
-  const onClickCard = () => {
-    navigate(`/product/${card.id}`);
-  };
+  const onClickCard = useCallback(() => {
+    navigate(`/candidate/${card.id}`);
+  }, [navigate]);
+
   return (
     <div className={styles.card} onClick={onClickCard}>
       <div className={styles.card_item}>
@@ -35,7 +37,7 @@ export const CandidateCard = ({ card }: Readonly<ICandidateCardProps>) => {
         <div className={styles.card_item__label}>Вердикт: &ensp;</div>
         <div
           className={styles.card_item__value}
-          style={{ backgroundColor: card.vc.split('-')[1] }}
+          style={{ backgroundColor: card.vc.split('-')[1] ?? 'transparent' }}
         >
           {card.verdict}
         </div>
@@ -46,4 +48,4 @@ export const CandidateCard = ({ card }: Readonly<ICandidateCardProps>) => {
       </div>
     </div>
   );
-};
+});
