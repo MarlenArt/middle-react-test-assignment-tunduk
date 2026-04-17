@@ -5,6 +5,8 @@ const initialState: IInitialStateFilters = {
   name: '',
   sort: '',
   verdict: '',
+  currentPage: 1,
+  itemsPerPage: 10,
 };
 
 const filtersSlice = createSlice({
@@ -20,10 +22,17 @@ const filtersSlice = createSlice({
     setVerdictFilter: (state, action: PayloadAction<string>) => {
       state.verdict = action.payload;
     },
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
   },
 });
 
 export const filtersReducer = filtersSlice.reducer;
 
-export const { setNameFilter, setVerdictFilter, setSortFilter } =
-  filtersSlice.actions;
+export const {
+  setNameFilter,
+  setVerdictFilter,
+  setSortFilter,
+  setCurrentPage,
+} = filtersSlice.actions;

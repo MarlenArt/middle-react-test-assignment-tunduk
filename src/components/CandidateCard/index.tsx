@@ -40,6 +40,10 @@ export const CandidateCard = ({ card }: Readonly<ICandidateCardProps>) => {
           {card.verdict}
         </div>
       </div>
+      <div className={styles.card_item}>
+        <div className={styles.card_item__label}>status: &ensp;</div>
+        <div>{card?.status}</div>
+      </div>
     </div>
   );
 };

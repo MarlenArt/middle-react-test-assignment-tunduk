@@ -17,20 +17,23 @@ import {
   setNameFilter,
   setVerdictFilter,
   setSortFilter,
+  setCurrentPage,
 } from '@/store/filtersSlice.ts';
-import { applyAllFilters, setCurrentPage } from '@/store/candidateSlice.ts';
+import { applyAllFilters } from '@/store/candidateSlice.ts';
 import { Pagination } from '@/components/Pagination';
 import { selectPaginatedCandidates } from '@/store/selectorts.ts';
 
 export const CandidatesList = () => {
   const dispatch = useAppDispatch();
-  const candidatesList = useAppSelector((state) => state.candidate.list);
   const paginateCandidates = useAppSelector(selectPaginatedCandidates);
   const [searchParams] = useSearchParams();
 
-  const { listLoading } = useSelector((state: RootState) => state.candidate);
+  const { listLoading, list } = useSelector(
+    (state: RootState) => state.candidate
+  );
 
   useEffect(() => {
+    if (!!list.length) return;
     dispatch(fetchCandidatesAction());
   }, [dispatch]);
 
@@ -43,18 +46,13 @@ export const CandidatesList = () => {
     dispatch(setVerdictFilter(verdict));
     dispatch(setSortFilter(sort));
     dispatch(setCurrentPage(page));
+    dispatch(setNameFilter(name));
 
-    if (name) {
-      dispatch(setNameFilter(name));
-    }
-
-    if (candidatesList.length > 0) {
+    if (list.length > 0) {
       dispatch(applyAllFilters({ name, verdict, sort }));
     }
-  }, [name, verdict, sort, page, dispatch, candidatesList.length]);
-
-  if (listLoading) return <div>Loading...</div>;
-
+  }, [name, verdict, sort, page, dispatch, list.length]);
+  console.log({ list, paginateCandidates });
   return (
     <div className={styles.container}>
       <div className={styles.filters}>
@@ -62,11 +60,17 @@ export const CandidatesList = () => {
         <FilterByName />
         <FilterByVerdict />
       </div>
-      <div className={styles.cards}>
-        {paginateCandidates.map((item: ICandidateRes) => (
-          <CandidateCard key={item.id} card={item} />
-        ))}
-      </div>
+      {listLoading ? (
+        <h1>Загрузка...</h1>
+      ) : !!paginateCandidates.length ? (
+        <div className={styles.cards}>
+          {paginateCandidates.map((item: ICandidateRes) => (
+            <CandidateCard key={item.id} card={item} />
+          ))}
+        </div>
+      ) : (
+        <h1>Кандидаты не найдены</h1>
+      )}
       <div className={styles.pagination}>
         <Pagination />
       </div>

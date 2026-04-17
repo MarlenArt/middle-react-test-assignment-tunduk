@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { CandidatesList } from '@/pages/CandidatesList/index';
-import { CandidateDetail } from '@/pages/CandidateDetail/index';
+import { CandidatesList } from '@/pages/CandidatesList';
+import { CandidateDetail } from '@/pages/CandidateDetail';
 import { BaseLayout } from '../layouts/baseLayout';
 
 export const appRouter = createBrowserRouter([

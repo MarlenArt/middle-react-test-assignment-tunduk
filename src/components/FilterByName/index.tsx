@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.ts';
-import { type ChangeEvent, useEffect } from 'react';
+import { type ChangeEvent, useEffect, useRef } from 'react';
 import useDebounce from '@/hooks/useDebounce.ts';
 import { useSearchParams } from 'react-router';
 import { setNameFilter } from '@/store/filtersSlice.ts';
@@ -9,23 +9,30 @@ export const FilterByName = () => {
   const dispatch = useAppDispatch();
   const selectNameFilter = useAppSelector((state) => state.filters.name);
 
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const nameParams = searchParams.get('name');
 
   const debouncedValue = useDebounce(selectNameFilter, 300);
+
+  const isMounted = useRef(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     dispatch(setNameFilter(value));
   };
 
-  console.log({ debouncedValue, selectNameFilter });
-
   useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+
     setSearchParams(
       (prev) => {
         const newParams = new URLSearchParams(prev);
 
-        const currentInUrl = newParams.get('name') || '';
+        const currentInUrl = nameParams || '';
 
         if (debouncedValue === currentInUrl) return prev;
 
@@ -39,7 +46,7 @@ export const FilterByName = () => {
       },
       { replace: true }
     );
-  }, [debouncedValue, dispatch, setSearchParams]);
+  }, [debouncedValue, dispatch, setSearchParams, nameParams]);
 
   return (
     <div className={styles.container}>

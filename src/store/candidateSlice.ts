@@ -1,15 +1,26 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { IInitialStateCandidates, TSortOption } from './types';
-import { fetchCandidatesAction } from './actions';
+import type {
+  ICandidateRes,
+  IInitialStateCandidates,
+  TSortOption,
+} from './types';
+import {
+  fetchCandidateDetailAction,
+  fetchCandidatesAction,
+  updateCandidateStatusAction,
+} from './actions';
 import { parseExperience } from '@/utils/parseExperience.ts';
 
 const initialState: IInitialStateCandidates = {
   list: [],
   filteredList: [],
   listLoading: false,
-  error: null,
-  currentPage: 1,
-  itemsPerPage: 10,
+  listError: null,
+  candidateDetail: null,
+  candidateLoading: false,
+  candidateError: null,
+  isUpdateLoading: false,
+  updateError: null,
 };
 
 const candidateSlice = createSlice({
@@ -63,27 +74,76 @@ const candidateSlice = createSlice({
 
       state.filteredList = result;
     },
-    setCurrentPage: (state, action: PayloadAction<number>) => {
-      state.currentPage = action.payload;
+    setCandidateDetail: (
+      state,
+      action: PayloadAction<ICandidateRes | null>
+    ) => {
+      state.candidateDetail = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCandidatesAction.pending, (state) => {
         state.listLoading = true;
-        state.error = null;
+        state.listError = null;
       })
       .addCase(fetchCandidatesAction.fulfilled, (state, action) => {
         state.listLoading = false;
         state.list = action.payload;
-        state.filteredList = action.payload;
       })
       .addCase(fetchCandidatesAction.rejected, (state) => {
         state.listLoading = false;
-        state.error = 'Ошибка загрузки';
+        state.listError = 'Ошибка загрузки';
+      })
+      .addCase(fetchCandidateDetailAction.pending, (state) => {
+        state.candidateLoading = true;
+        state.candidateError = null;
+      })
+      .addCase(fetchCandidateDetailAction.fulfilled, (state, action) => {
+        state.candidateLoading = false;
+        state.candidateDetail = action.payload;
+      })
+      .addCase(fetchCandidateDetailAction.rejected, (state) => {
+        state.candidateLoading = false;
+        state.candidateError = 'Ошибка загрузки';
+      })
+      .addCase(updateCandidateStatusAction.pending, (state, action) => {
+        const { id, status } = action.meta.arg;
+        const newStatus = `${status} - изменен`;
+
+        state.isUpdateLoading = true;
+
+        const update = (item: ICandidateRes) => {
+          if (item.id === id) item.status = newStatus;
+        };
+
+        state.list.forEach(update);
+        state.filteredList.forEach(update);
+        if (state.candidateDetail?.id === id) {
+          state.candidateDetail.status = newStatus;
+        }
+      })
+      .addCase(updateCandidateStatusAction.fulfilled, (state) => {
+        state.candidateLoading = false;
+      })
+      .addCase(updateCandidateStatusAction.rejected, (state, action) => {
+        state.candidateLoading = false;
+
+        const { id, oldStatus } = action.meta.arg;
+        const revert = (item: ICandidateRes) => {
+          if (item.id === id) item.status = oldStatus;
+        };
+
+        state.list.forEach(revert);
+        state.filteredList.forEach(revert);
+        if (state.candidateDetail?.id === id) {
+          state.candidateDetail.status = oldStatus;
+        }
+
+        state.candidateError = action.payload as string;
       });
   },
 });
 
 export const candidateReducer = candidateSlice.reducer;
-export const { applyAllFilters, setCurrentPage } = candidateSlice.actions;
+export const { applyAllFilters, setCandidateDetail } = candidateSlice.actions;

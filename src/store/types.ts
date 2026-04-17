@@ -25,15 +25,20 @@ export interface IInitialStateCandidates {
   list: ICandidateRes[];
   filteredList: ICandidateRes[];
   listLoading: boolean;
-  error: string | null;
-  currentPage: number;
-  itemsPerPage: number;
+  listError: string | null;
+  candidateDetail: ICandidateRes | null;
+  candidateLoading: boolean;
+  candidateError: string | null;
+  isUpdateLoading: boolean;
+  updateError: string | null;
 }
 
 export interface IInitialStateFilters {
   name: string;
   verdict: string;
   sort: string;
+  currentPage: number;
+  itemsPerPage: number;
 }
 
 export type TSortOption = 'name' | 'date' | 'exp' | 'default';

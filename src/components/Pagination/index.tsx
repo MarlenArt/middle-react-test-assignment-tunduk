@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.ts';
 import { selectTotalPages } from '@/store/selectorts.ts';
-import { setCurrentPage } from '@/store/candidateSlice.ts';
+import { setCurrentPage } from '@/store/filtersSlice';
 
 import styles from './styles.module.scss';
 import { useSearchParams } from 'react-router';
@@ -8,7 +8,7 @@ import { useSearchParams } from 'react-router';
 export const Pagination = () => {
   const [_, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const currentPage = useAppSelector((state) => state.candidate.currentPage);
+  const currentPage = useAppSelector((state) => state.filters.currentPage);
   const totalPages = useAppSelector(selectTotalPages);
 
   const handlePageChange = (page: number) => {
