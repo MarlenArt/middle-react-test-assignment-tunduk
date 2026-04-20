@@ -1,7 +1,11 @@
 import React, { type PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
 import type { RenderOptions } from '@testing-library/react';
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import {
+  configureStore,
+  combineReducers,
+  type EnhancedStore,
+} from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 
@@ -18,7 +22,7 @@ type RootState = ReturnType<typeof rootReducer>;
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   preloadedState?: Partial<RootState>;
   initialEntries?: string[];
-  store?: any;
+  store?: EnhancedStore;
 }
 
 export function renderWithProviders(

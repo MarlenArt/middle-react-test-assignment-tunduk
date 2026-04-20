@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import candidatesMock from '@/mock/candidates.json';
+import candidatesMock from '@/mock/candidates-large.json';
 import type { ICandidateRes } from './types';
 
 export const fetchCandidatesAction = createAsyncThunk<

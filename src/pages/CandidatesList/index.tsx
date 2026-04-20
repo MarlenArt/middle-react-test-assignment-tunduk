@@ -1,9 +1,6 @@
-import { useEffect } from 'react';
+import { type ChangeEvent, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  FixedSizeList as List,
-  type ListChildComponentProps,
-} from 'react-window';
+import { List, type RowComponentProps } from 'react-window';
 
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.ts';
 import { fetchCandidatesAction } from '@/store/actions.ts';
@@ -22,6 +19,7 @@ import {
   setVerdictFilter,
   setSortFilter,
   setCurrentPage,
+  setItemsPerPage,
 } from '@/store/filtersSlice.ts';
 import { applyAllFilters } from '@/store/candidateSlice.ts';
 import { Pagination } from '@/components/Pagination';
@@ -31,6 +29,9 @@ export const CandidatesList = () => {
   const dispatch = useAppDispatch();
 
   const paginateCandidates = useAppSelector(selectPaginatedCandidates);
+  const itemsPerPage = useAppSelector((state) => state.filters.itemsPerPage);
+
+  const isMobile = window.innerWidth < 768;
 
   const [searchParams] = useSearchParams();
 
@@ -59,7 +60,7 @@ export const CandidatesList = () => {
     }
   }, [name, verdict, sort, page, dispatch, list.length]);
 
-  const Row = ({ index, style }: ListChildComponentProps) => {
+  const Row = ({ index, style }: RowComponentProps) => {
     const candidate = paginateCandidates[index];
 
     if (!candidate) return null;
@@ -69,6 +70,10 @@ export const CandidatesList = () => {
         <CandidateCard card={candidate} />
       </div>
     );
+  };
+
+  const handleChangeItemsPerPage = (e: ChangeEvent<HTMLSelectElement>) => {
+    dispatch(setItemsPerPage(e.target.value as unknown as number));
   };
 
   return (
@@ -84,13 +89,11 @@ export const CandidatesList = () => {
       ) : paginateCandidates.length ? (
         <div className={styles.cards}>
           <List
-            height={700}
-            width="100%"
-            itemCount={paginateCandidates.length}
-            itemSize={185}
-          >
-            {Row}
-          </List>
+            rowComponent={Row}
+            rowHeight={isMobile ? 350 : 200}
+            rowCount={paginateCandidates.length}
+            rowProps={{ data: paginateCandidates }}
+          />
         </div>
       ) : (
         <h1>Кандидаты не найдены</h1>
@@ -98,6 +101,15 @@ export const CandidatesList = () => {
 
       <div className={styles.pagination}>
         <Pagination />
+        <select
+          className={styles.select_count}
+          value={itemsPerPage}
+          onChange={handleChangeItemsPerPage}
+        >
+          <option value={10}>10</option>
+          <option value={30}>30</option>
+          <option value={50}>50</option>
+        </select>
       </div>
     </div>
   );

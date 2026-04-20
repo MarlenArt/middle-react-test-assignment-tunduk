@@ -15,3 +15,12 @@
     }
   }
 }
+
+@media (max-width: 475px) {
+  .card {
+    &_item {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+}

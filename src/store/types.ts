@@ -6,7 +6,7 @@ export interface ICandidateRes {
   file?: string;
   email: string;
   phone?: string | null;
-  city: string;
+  city?: string;
   tg: string;
   exp: string[][];
   total_exp: string;

@@ -3,6 +3,7 @@
   height: 60px;
   background-color: white;
   position: fixed;
+  z-index: 10;
 
   .header {
     font-size: 34px;
@@ -13,6 +14,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: white;
     &_links {
       display: flex;
       gap: 24px;
@@ -20,6 +22,15 @@
       &__link {
         cursor: pointer;
       }
+    }
+  }
+}
+
+@media (max-width: 475px) {
+  .wrapper {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 }

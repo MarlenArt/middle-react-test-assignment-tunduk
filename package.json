@@ -23,7 +23,7 @@
     "react-router-dom": "^7.14.1",
     "react-toastify": "^11.0.5",
     "react-virtualized-auto-sizer": "^2.0.3",
-    "react-window": "^1.8.7",
+    "react-window": "^2.2.7",
     "sass-embedded": "^1.99.0"
   },
   "devDependencies": {

@@ -25,6 +25,9 @@ const filtersSlice = createSlice({
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
     },
+    setItemsPerPage: (state, action: PayloadAction<number>) => {
+      state.itemsPerPage = action.payload;
+    },
   },
 });
 
@@ -35,4 +38,5 @@ export const {
   setVerdictFilter,
   setSortFilter,
   setCurrentPage,
+  setItemsPerPage,
 } = filtersSlice.actions;
